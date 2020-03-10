@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<!-- saved from url=(0052)https://www.dazhuanlan.com/2019/11/14/5dcd6ed065a80/ -->
+<html class="theme-next pisces use-motion" lang="zh-CN"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="theme-color" content="#222">
+    <meta name="renderer" content="webkit">
+    <link type="text/css" media="all" href="./编译 Runtime 源码 （objc4-750.1） _ 大专栏_files/autoptimize_4353f6101f4e04ab3b763d9eb58f4be2.css" rel="stylesheet"><title>  编译 Runtime 源码 （objc4-750.1） | 大专栏</title>
+    <!-- favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="https://www.dazhuanlan.com/favicon.ico">
+    <!-- jQuery fancybox CSS -->
+    
+    <!-- Main CSS -->
+    
+    <!-- style.css -->
+    
+    <!-- Highlight -->
+    
+    <link rel="profile" href="http://gmpg.org/xfn/11">
+    <link rel="pingback" href="https://www.dazhuanlan.com/xmlrpc.php">
+        <script src="./编译 Runtime 源码 （objc4-750.1） _ 大专栏_files/hm.js"></script><script type="text/javascript" id="hexo.configuration">
+        var NexT = window.NexT || {};
+        var CONFIG = {
+            scheme: 'Pisces',
+            sidebar: {"position":"left","display":"post"},
+            fancybox: true,
+            motion: true
+        };
+    </script>
+    <link rel="alternate" type="application/rss+xml" title="大专栏 » 编译 Runtime 源码 （objc4-750.1）评论Feed" href="https://www.dazhuanlan.com/2019/11/14/5dcd6ed065a80/feed/">
+
+<link rel="https://api.w.org/" href="https://www.dazhuanlan.com/wp-json/">
+<link rel="prev" title="hexo博客next主题折腾记" href="https://www.dazhuanlan.com/2019/11/14/5dcd6ec9454d4/">
+<link rel="next" title="MySQL 常用的一些函数" href="https://www.dazhuanlan.com/2019/11/14/5dcd6ee0a7f53/">
+<link rel="canonical" href="https://www.dazhuanlan.com/2019/11/14/5dcd6ed065a80/">
+<link rel="alternate" type="application/json+oembed" href="https://www.dazhuanlan.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fwww.dazhuanlan.com%2F2019%2F11%2F14%2F5dcd6ed065a80%2F">
+<link rel="alternate" type="text/xml+oembed" href="https://www.dazhuanlan.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fwww.dazhuanlan.com%2F2019%2F11%2F14%2F5dcd6ed065a80%2F&amp;format=xml">
+<style type="text/css">.crp_title{
+color:#ff0000;
+}</style></head>
+<body>
+<div class="container one-collumn sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <header id="header" class="header">
+        <div class="header-inner">
+            <div class="site-meta">
+                <div class="custom-logo-site-title">
+                    <a href="https://www.dazhuanlan.com/" class="brand" rel="start">
+                        <span class="logo-line-before"><i style="transform: translateX(100%);"></i></span>
+                        <span class="site-title">大专栏</span>
+                        <span class="logo-line-after"><i style="transform: translateX(-100%);"></i></span>
+                    </a>
+                </div>
+                <p class="site-subtitle"></p>
+            </div>
+            <div class="site-nav-toggle">
+                <button>
+                    <span class="btn-bar"></span>
+                    <span class="btn-bar"></span>
+                    <span class="btn-bar"></span>
+                </button>
+            </div>
+            <nav class="site-nav"><ul id="menu-caidan" class="menu menu-left"><li id="menu-item-166091" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-166091"><a href="https://www.dazhuanlan.com/backend/">后端</a></li>
+<li id="menu-item-166092" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-166092"><a href="https://www.dazhuanlan.com/frontend/">前端</a></li>
+<li id="menu-item-166093" class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor current-menu-parent current-post-parent menu-item-166093"><a href="https://www.dazhuanlan.com/ai/">人工智能</a></li>
+<li id="menu-item-166094" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-166094"><a href="https://www.dazhuanlan.com/devops/">DevOps</a></li>
+<li id="menu-item-166095" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-166095"><a href="https://www.dazhuanlan.com/mobile/">移动端</a></li>
+<li id="menu-item-166096" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-166096"><a href="https://www.dazhuanlan.com/test/">测试</a></li>
+<li id="menu-item-166097" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-166097"><a href="https://www.dazhuanlan.com/life/">程序人生</a></li>
+</ul></nav>            <div class="site-nav">
+                    <form id="searchform" method="get" action="https://www.dazhuanlan.com/">
+                        <input type="text" class="search-field" name="s" placeholder="" value="">
+                        <input type="submit" value="搜索">
+                    </form>
+            </div>
+        </div>
+</header>
+<main id="main" class="main">
+    <div class="main-inner">
+        <div class="content-wrap">
+            <div id="content" class="content">
+                <div id="posts" class="posts-expand">
+                    <article class="post">
+	<header class="post-header">
+		<h1 class="post-title">
+			编译 Runtime 源码 （objc4-750.1）		</h1>
+		<div class="post-meta">
+			<span class="post-time">
+				<span class="post-meta-item-icon"><i class="fa fa-calendar-o"></i></span>
+				<span class="post-meta-item-text">发表于</span>
+				<time datetime="2019-11-14">2019-11-14</time>
+			</span>
+			<span class="post-category">
+				&nbsp;|&nbsp;
+				<span class="post-meta-item-icon"><i class="fa fa-folder-o"></i></span>
+				<span class="post-meta-item-text">分类于</span>
+				<span>
+					<a href="https://www.dazhuanlan.com/ai/" rel="category tag">人工智能</a>				</span>
+			</span>
+			<span class="post-comments-count">
+				&nbsp;|&nbsp;
+				<span class="post-comments-count">没有评论</span>
+			</span>
+		</div>
+	</header>
+	<div class="post-body">
+		<div class="theme-default-content content__default"> <p><a href="https://github.com/hnxczk/objc4-750.1" target="_blank" rel="noopener noreferrer">这里</a>有一个编译好的，对下面内容不感兴趣的可以直接拿走用。（提示： 这里和后面所用的源码都是 x86 平台的）。</p> <h2 id="如何查看开源网站"><a href="https://www.dazhuanlan.com/2019/11/14/5dcd6ed065a80/#%E5%A6%82%E4%BD%95%E6%9F%A5%E7%9C%8B%E5%BC%80%E6%BA%90%E7%BD%91%E7%AB%99" aria-hidden="true" class="header-anchor">#</a> 如何查看开源网站</h2> <p><a href="https://opensource.apple.com/" target="_blank" rel="noopener noreferrer">开源网站首页</a></p> <ol><li><p>这里面有许多开源的项目，以及开源项目对应的系统版本。因此需要先选择某个版本的系统来查看对应的开源项目。</p> <div class="language- extra-class"><pre class="language-text"><code>https://opensource.apple.com/
+</code></pre></div><p><img src="./编译 Runtime 源码 （objc4-750.1） _ 大专栏_files/18.614c77fd.jpg" alt=""></p></li> <li><p>由于 iOS 的开源项目较少，因此我们选择最新的 mac OS 10.14.1 版本。</p> <div class="language- extra-class"><pre class="language-text"><code>https://opensource.apple.com/release/macos-10141.html
+</code></pre></div></li> <li><p>Runtime 对应的开源项目是 objc4 这个项目，通过 <code>command + F</code> 来搜索点击右侧的下载按钮就能下载下来。下面就是下载地址。</p> <div class="language- extra-class"><pre class="language-text"><code>https://opensource.apple.com/tarballs/objc4/objc4-750.1.tar.gz
+</code></pre></div><p><img src="./编译 Runtime 源码 （objc4-750.1） _ 大专栏_files/19.3a3d9df7.jpg" alt=""></p></li> <li><p>如果你没有点击下载按钮而是点击了左侧的项目，就会跳转到源码目录</p> <div class="language- extra-class"><pre class="language-text"><code>https://opensource.apple.com/source/objc4/objc4-750.1/
+</code></pre></div><p><img src="./编译 Runtime 源码 （objc4-750.1） _ 大专栏_files/22.e17c47dd.jpg" alt=""></p></li> <li><p>通过对比 3 和 4 的地址我们可以看出来地址中的 <code>tarballs</code> 和 <code>source</code> 决定了这个地址是项目的目录还是项目的压缩包。查找其他缺失的头文件所属的项目会用到这个技巧。</p> <p><img src="./编译 Runtime 源码 （objc4-750.1） _ 大专栏_files/20.eb0658f1.jpg" alt=""></p> <p><img src="./编译 Runtime 源码 （objc4-750.1） _ 大专栏_files/21.2664d4de.jpg" alt=""></p></li> <li><p>通过下面的地址可以查找到所有版本的 objc4 的项目，我们可以看出来数值越大的版本越新。但是也不是版本越高越好，某些时候新版本会缺失一些文件，应该是移去其他项目或者私有化了。这时候可以使用低版本来替换。</p> <div class="language- extra-class"><pre class="language-text"><code>https://opensource.apple.com/source/objc4/
+</code></pre></div></li></ol> <h2 id="下载源码"><a href="https://www.dazhuanlan.com/2019/11/14/5dcd6ed065a80/#%E4%B8%8B%E8%BD%BD%E6%BA%90%E7%A0%81" aria-hidden="true" class="header-anchor">#</a> 下载源码</h2> <p>按照上面所说的我们下载了 <code>objc4-750.1</code> 的压缩包。解压之后编译就会报很多的错误，其中大部分都是缺少头文件，我们需要从其他的开源项目中找到它们。下面是需要下载的开源项目列表。</p> <ol><li>objc4-750.1.tar.gz (Runtime 源码)</li> <li>Libc-825.40.1.tar.gz （不是最新的，最新的有些头文件找不到）</li> <li>dyld-551.4.tar.gz （不是最新的）</li> <li>launchd-842.92.1.tar.gz (这个在 source 目录下找不到，需要在 tarballs 目录下查找)</li> <li>libauto-187.tar.gz</li> <li>libclosure-73.tar.gz</li> <li>libdispatch-1008.200.78.tar.gz</li> <li>libplatform-177.200.16.tar.gz</li> <li>xnu-4903.221.2.tar.gz</li></ol> <h2 id="解压"><a href="https://www.dazhuanlan.com/2019/11/14/5dcd6ed065a80/#%E8%A7%A3%E5%8E%8B" aria-hidden="true" class="header-anchor">#</a> 解压</h2> <p>将所有压缩包都解压，除了 <code>objc4-750.1</code> 外都放到一个文件夹 <code>source</code> 下。</p> <p><img src="./编译 Runtime 源码 （objc4-750.1） _ 大专栏_files/1.572f9f11.png" alt=""></p> <h2 id="编译"><a href="https://www.dazhuanlan.com/2019/11/14/5dcd6ed065a80/#%E7%BC%96%E8%AF%91" aria-hidden="true" class="header-anchor">#</a> 编译</h2> <h3 id="_1-创建-include-文件夹并设置-header-search-paths"><a href="https://www.dazhuanlan.com/2019/11/14/5dcd6ed065a80/#_1-%E5%88%9B%E5%BB%BA-include-%E6%96%87%E4%BB%B6%E5%A4%B9%E5%B9%B6%E8%AE%BE%E7%BD%AE-header-search-paths" aria-hidden="true" class="header-anchor">#</a> 1. 创建 <code>include</code> 文件夹并设置 Header Search Paths</h3> <p>进入 <code>objc4-750.1/</code>，创建一个文件夹 <code>include</code> 文件夹。</p> <p><img src="./编译 Runtime 源码 （objc4-750.1） _ 大专栏_files/2.9e65dc4d.png" alt=""></p> <p>在 <code>Build Settings</code> 中设置 <code>Header Search Paths</code>。 Debug 和 Release 都要修改。</p> <div class="language- extra-class"><pre class="language-text"><code>$(SRCROOT)/include
+</code></pre></div><p><img src="./编译 Runtime 源码 （objc4-750.1） _ 大专栏_files/3.773c89ea.jpg" alt=""></p> <h3 id="_2-开始编译"><a href="https://www.dazhuanlan.com/2019/11/14/5dcd6ed065a80/#_2-%E5%BC%80%E5%A7%8B%E7%BC%96%E8%AF%91" aria-hidden="true" class="header-anchor">#</a> 2. 开始编译</h3> <p>开始编译后会出现很多 error ，一个一个来解决它们。</p> <h4 id="_1-i386-error"><a href="https://www.dazhuanlan.com/2019/11/14/5dcd6ed065a80/#_1-i386-error" aria-hidden="true" class="header-anchor">#</a> 1. <code>i386 error</code></h4> <div class="language- extra-class"><pre class="language-text"><code>error: The i386 architecture is deprecated. You should update your ARCHS build setting to remove the i386 architecture. (in target 'objc-trampolines')
+Build system information
+error: The i386 architecture is deprecated. You should update your ARCHS build setting to remove the i386 architecture. (in target 'objc')
+</code></pre></div><p>提示很明显，将 对应的 <code>TARGETS</code> -&gt; <code>Build Settings</code> -&gt; <code>Architectures</code> 都改为 <code>Standard Archiectures</code> 或者去除 i386 这种架构的支持。</p> <p><img src="./编译 Runtime 源码 （objc4-750.1） _ 大专栏_files/4.83f3d3b3.jpg" alt=""></p> <p>继续编译</p> <h4 id="_2-sys-reason-h-file-not-found"><a href="https://www.dazhuanlan.com/2019/11/14/5dcd6ed065a80/#_2-sys-reason-h-file-not-found" aria-hidden="true" class="header-anchor">#</a> 2. <code>'sys/reason.h' file not found</code></h4> <p>在 source 目录下搜索 reason.h</p> <h5 id="_1-通过-finder"><a href="https://www.dazhuanlan.com/2019/11/14/5dcd6ed065a80/#_1-%E9%80%9A%E8%BF%87-finder" aria-hidden="true" class="header-anchor">#</a> 1. 通过 Finder</h5> <p>通过 finder 在 <code>source/</code> 文件夹下搜索 <code>reason.h</code>。</p> <p><img src="./编译 Runtime 源码 （objc4-750.1） _ 大专栏_files/5.8160e8ab.jpg" alt=""></p> <h5 id="_2-通过终端搜索"><a href="https://www.dazhuanlan.com/2019/11/14/5dcd6ed065a80/#_2-%E9%80%9A%E8%BF%87%E7%BB%88%E7%AB%AF%E6%90%9C%E7%B4%A2" aria-hidden="true" class="header-anchor">#</a> 2. 通过终端搜索</h5> <div class="language- extra-class"><pre class="language-text"><code>find . -name "reason.h"
+</code></pre></div><p>这样会得到对应的路径</p> <div class="language- extra-class"><pre class="language-text"><code>./xnu-4903.221.2/bsd/sys/reason.h
+</code></pre></div><p>根据编译错误我们可以看出 reason.h 文件在 sys 目录下面，因此我们在 include 目录下创建 sys 目录，并将 reason.h 放到该目录下。当然也可以通过命令行来实现，这里就不作细数了。</p> <p><img src="./编译 Runtime 源码 （objc4-750.1） _ 大专栏_files/6.f7621b4a.jpg" alt=""></p> <h4 id="_3-mach-o-dyld-priv-h-file-not-found"><a href="https://www.dazhuanlan.com/2019/11/14/5dcd6ed065a80/#_3-mach-o-dyld-priv-h-file-not-found" aria-hidden="true" class="header-anchor">#</a> 3. <code>'mach-o/dyld_priv.h' file not found</code></h4> <p>重复上面的操作，选择 <code>./dyld-551.4/include/mach-o/dyld_priv.h</code></p> <h4 id="_4-os-lock-private-h-file-not-found"><a href="https://www.dazhuanlan.com/2019/11/14/5dcd6ed065a80/#_4-os-lock-private-h-file-not-found" aria-hidden="true" class="header-anchor">#</a> 4. <code>'os/lock_private.h' file not found</code></h4> <p>选择 <code>./libplatform-177.200.16/private/os/lock_private.h</code></p> <h4 id="_5-os-base-private-h-file-not-found"><a href="https://www.dazhuanlan.com/2019/11/14/5dcd6ed065a80/#_5-os-base-private-h-file-not-found" aria-hidden="true" class="header-anchor">#</a> 5. <code>'os/base_private.h' file not found</code></h4> <p>选择 <code>./libplatform-177.200.16/private/os/base_private.h</code></p> <h4 id="_6-pthread-tsd-private-h-file-not-found"><a href="https://www.dazhuanlan.com/2019/11/14/5dcd6ed065a80/#_6-pthread-tsd-private-h-file-not-found" aria-hidden="true" class="header-anchor">#</a> 6. <code>'pthread/tsd_private.h' file not found</code></h4> <p>选择 <code>./libpthread-330.220.2/private/tsd_private.h</code></p> <h4 id="_7-system-machine-cpu-capabilities-h-file-not-found"><a href="https://www.dazhuanlan.com/2019/11/14/5dcd6ed065a80/#_7-system-machine-cpu-capabilities-h-file-not-found" aria-hidden="true" class="header-anchor">#</a> 7. <code>'System/machine/cpu_capabilities.h' file not found</code></h4> <p>这个搜索出来三个</p> <div class="language- extra-class"><pre class="language-text"><code>./xnu-4903.221.2/osfmk/i386/cpu_capabilities.h
+./xnu-4903.221.2/osfmk/machine/cpu_capabilities.h
+./xnu-4903.221.2/osfmk/arm/cpu_capabilities.h
+</code></pre></div><p>根据目录名 <code>machine</code> 选择 <code>./xnu-4903.221.2/osfmk/machine/cpu_capabilities.h</code></p> <h4 id="_8-os-tsd-h-file-not-found"><a href="https://www.dazhuanlan.com/2019/11/14/5dcd6ed065a80/#_8-os-tsd-h-file-not-found" aria-hidden="true" class="header-anchor">#</a> 8. <code>'os/tsd.h' file not found</code></h4> <p>同样有两个</p> <div class="language- extra-class"><pre class="language-text"><code>./xnu-4903.221.2/libsyscall/os/tsd.h
+./libdispatch-1008.200.78/src/shims/tsd.h
+</code></pre></div><p>选择 <code>./xnu-4903.221.2/libsyscall/os/tsd.h</code></p> <h4 id="_9-pthread-spinlock-private-h-file-not-found"><a href="https://www.dazhuanlan.com/2019/11/14/5dcd6ed065a80/#_9-pthread-spinlock-private-h-file-not-found" aria-hidden="true" class="header-anchor">#</a> 9. <code>'pthread/spinlock_private.h' file not found</code></h4> <p>选择 <code>./libpthread-330.220.2/private/spinlock_private.h</code></p> <h4 id="_10-system-pthread-machdep-h-file-not-found"><a href="https://www.dazhuanlan.com/2019/11/14/5dcd6ed065a80/#_10-system-pthread-machdep-h-file-not-found" aria-hidden="true" class="header-anchor">#</a> 10. <code>'System/pthread_machdep.h' file not found</code></h4> <p>选择 <code>./Libc-825.40.1/pthreads/pthread_machdep.h</code></p> <h4 id="_11-crashreporterclient-h-file-not-found"><a href="https://www.dazhuanlan.com/2019/11/14/5dcd6ed065a80/#_11-crashreporterclient-h-file-not-found" aria-hidden="true" class="header-anchor">#</a> 11. <code>'CrashReporterClient.h' file not found</code></h4> <p>选择 <code>./Libc-825.40.1/include/CrashReporterClient.h</code></p> <p>添加进去之后依然报错，查看报错的位置在 <code>CrashReporterClient.h</code> 文件中，代码如下</p> <div class="language- extra-class"><pre class="language-text"><code>#ifdef LIBC_NO_LIBCRASHREPORTERCLIENT
+
+/* Fake the CrashReporterClient API */
+#define CRGetCrashLogMessage() 0
+#define CRSetCrashLogMessage(x) /* nothing */
+
+#else /* !LIBC_NO_LIBCRASHREPORTERCLIENT */
+
+/* Include the real CrashReporterClient.h */
+
+#include_next &lt;CrashReporterClient.h&gt;
+
+#endif /* !LIBC_NO_LIBCRASHREPORTERCLIENT */
+
+#endif /* _LIBC_CRASHREPORTERCLIENT_H */
+</code></pre></div><p>这个错误发生在 <code>#include_next</code>，事实上我们并没 <code>CrashReporterClient</code> 这个库。所以需要改一下工程配置文件:
+<code>Build Settings</code> -&gt; <code>Preprocessor Macros（Debug &amp; Release）</code>加入:</p> <div class="language- extra-class"><pre class="language-text"><code>LIBC_NO_LIBCRASHREPORTERCLIENT
+</code></pre></div><p><img src="./编译 Runtime 源码 （objc4-750.1） _ 大专栏_files/7.e2f089e9.jpg" alt=""></p> <h4 id="_12-block-private-h-file-not-found"><a href="https://www.dazhuanlan.com/2019/11/14/5dcd6ed065a80/#_12-block-private-h-file-not-found" aria-hidden="true" class="header-anchor">#</a> 12. <code>'Block_private.h' file not found</code></h4> <p>找到三个</p> <div class="language- extra-class"><pre class="language-text"><code>./xnu-4903.221.2/libkern/libkern/Block_private.h
+./libclosure-73/Block_private.h
+./libdispatch-1008.200.78/src/BlocksRuntime/Block_private.h
+</code></pre></div><p>通过对比选择了 <code>./libdispatch-1008.200.78/src/BlocksRuntime/Block_private.h</code>, 这个版本最新。</p> <h4 id="_13-objc-shared-cache-h-file-not-found"><a href="https://www.dazhuanlan.com/2019/11/14/5dcd6ed065a80/#_13-objc-shared-cache-h-file-not-found" aria-hidden="true" class="header-anchor">#</a> 13. <code>'objc-shared-cache.h' file not found</code></h4> <p>选择 <code>./dyld-551.4/include/objc-shared-cache.h</code></p> <h4 id="_14-typedef-redefinition-with-different-types-int-vs-volatile-osspinlock-aka-volatile-int"><a href="https://www.dazhuanlan.com/2019/11/14/5dcd6ed065a80/#_14-typedef-redefinition-with-different-types-int-vs-volatile-osspinlock-aka-volatile-int" aria-hidden="true" class="header-anchor">#</a> 14. <code>Typedef redefinition with different types ('int' vs 'volatile OSSpinLock' (aka 'volatile int'))</code></h4> <p>这是因为重复定义引起的，也就是我们引入的头文件中有重复定义的变量或者函数名称，因此我们在 <code>include</code> 目录下通过执行 <code>grep</code> 命令来查找重复的定义。</p> <div class="language- extra-class"><pre class="language-text"><code>grep -rne "typedef.*pthread_lock_t” .
+</code></pre></div><p>找到以下定义的位置</p> <div class="language- extra-class"><pre class="language-text"><code>./pthread/spinlock_private.h:59:typedef volatile OSSpinLock pthread_lock_t __deprecated_msg("Use &lt;os/lock.h&gt; instead");
+./System/pthread_machdep.h:214:typedef int pthread_lock_t;
+</code></pre></div><p>因此需要注释掉一个，而又由于 <code>pthread_machdep.h</code> 来自 <code>Libc-825.40.1</code>, 这是较老的版本，因此在这里最好注释掉它里面的定义。</p> <h4 id="_14-static-declaration-of-pthread-has-direct-tsd-follows-non-static-declaration"><a href="https://www.dazhuanlan.com/2019/11/14/5dcd6ed065a80/#_14-static-declaration-of-pthread-has-direct-tsd-follows-non-static-declaration" aria-hidden="true" class="header-anchor">#</a> 14. <code>Static declaration of '_pthread_has_direct_tsd' follows non-static declaration</code></h4> <p>这里有三个函数重复了</p> <div class="language- extra-class"><pre class="language-text"><code>_pthread_has_direct_tsd(void)
+_pthread_getspecific_direct(unsigned long slot)
+_pthread_setspecific_direct(unsigned long slot, void * val)
+</code></pre></div><p>同样同过 <code>grep</code> 命令来查找，然后发现他们也都是在 <code>pthread_machdep.h</code> 中，因此注释掉它们。</p> <div class="language- extra-class"><pre class="language-text"><code>_pthread_has_direct_tsd(void) 在 Line 216 - 232
+_pthread_getspecific_direct(unsigned long slot) 在 Line 243 - 264
+_pthread_setspecific_direct(unsigned long slot, void * val) 在 Line 267 - 294
+</code></pre></div><blockquote><p>经过上面这两次我们的修改，我们可以大概猜测到版本9XX后的Libc项目下的pthread相关代码，被苹果移到了libpthread项目了。（pthread_machdep.h来自Libc项目，tsd_private.h和spinlock_private.h来自libpthread项目）</p></blockquote> <p><a href="https://blog.csdn.net/wotors/article/details/52489464" target="_blank" rel="noopener noreferrer">原文</a></p> <h4 id="_15-use-of-undeclared-identifier-dyld-macosx-version-10-11"><a href="https://www.dazhuanlan.com/2019/11/14/5dcd6ed065a80/#_15-use-of-undeclared-identifier-dyld-macosx-version-10-11" aria-hidden="true" class="header-anchor">#</a> 15. <code>Use of undeclared identifier 'DYLD_MACOSX_VERSION_10_11'</code></h4> <p>在 dyld_priv.h 文件顶部加入一下宏：</p> <div class="language- extra-class"><pre class="language-text"><code>#define DYLD_MACOSX_VERSION_10_11 0x000A0B00
+#define DYLD_MACOSX_VERSION_10_12 0x000A0C00
+#define DYLD_MACOSX_VERSION_10_13 0x000A0D00
+#define DYLD_MACOSX_VERSION_10_14 0x000A0E00
+</code></pre></div><h4 id="_16-isa-h-file-not-found"><a href="https://www.dazhuanlan.com/2019/11/14/5dcd6ed065a80/#_16-isa-h-file-not-found" aria-hidden="true" class="header-anchor">#</a> 16. <code>'isa.h' file not found</code></h4> <p>通过查找你会发现 <code>isa.h</code> 是存在于 objc4 的项目中的，只不过没有引入工程。</p> <p><img src="./编译 Runtime 源码 （objc4-750.1） _ 大专栏_files/8.a3dd11d7.jpg" alt=""></p> <h4 id="_17-simple-h-file-not-found"><a href="https://www.dazhuanlan.com/2019/11/14/5dcd6ed065a80/#_17-simple-h-file-not-found" aria-hidden="true" class="header-anchor">#</a> 17. <code>'_simple.h' file not found</code></h4> <p>发现两个</p> <div class="language- extra-class"><pre class="language-text"><code>./Libc-825.40.1/gen/_simple.h
+./libplatform-177.200.16/private/_simple.h
+</code></pre></div><p>对比以后发现 <code>./libplatform-177.200.16/private/_simple.h</code>，较新，选择这个。</p> <h4 id="_18-libobjc-order"><a href="https://www.dazhuanlan.com/2019/11/14/5dcd6ed065a80/#_18-libobjc-order" aria-hidden="true" class="header-anchor">#</a> 18. <code>libobjc.order</code></h4> <div class="language- extra-class"><pre class="language-text"><code>ld: can't open order file: /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk/AppleInternal/OrderFiles/libobjc.order
+clang: error: linker command failed with exit code 1 (use -v to see invocation)
+</code></pre></div><p><code>libobjc.order</code> 的路径错误，在 <code>objc4-750.1</code> 目录下通过 <code>find . -name "libobjc.order"</code> 查找结果如下</p> <div class="language- extra-class"><pre class="language-text"><code>./libobjc.order
+</code></pre></div><p>因此我们修改下工程配置。<code>Build Settings</code> -&gt; <code>Linking</code> -&gt; <code>Order File</code>, 把 Debug 和 Release 下的 <code>$(SDKROOT)/AppleInternal/OrderFiles/libobjc.order</code> 都修改成 <code>libobjc.order</code>。</p> <p><img src="./编译 Runtime 源码 （objc4-750.1） _ 大专栏_files/9.20d69576.jpg" alt=""></p> <h4 id="_19-lcrashreporterclient"><a href="https://www.dazhuanlan.com/2019/11/14/5dcd6ed065a80/#_19-lcrashreporterclient" aria-hidden="true" class="header-anchor">#</a> 19. <code>-lCrashReporterClient</code></h4> <div class="language- extra-class"><pre class="language-text"><code>ld: library not found for -lCrashReporterClient
+clang: error: linker command failed with exit code 1 (use -v to see invocation)
+</code></pre></div><p>需去 <code>Build Settings</code> -&gt; <code>Linking</code> -&gt; <code>Other Linker Flags</code> 里删掉 <code>"-lCrashReporterClient"</code></p> <p><img src="./编译 Runtime 源码 （objc4-750.1） _ 大专栏_files/10.1f11bfa1.jpg" alt=""></p> <h4 id="_20-macosx-internal"><a href="https://www.dazhuanlan.com/2019/11/14/5dcd6ed065a80/#_20-macosx-internal" aria-hidden="true" class="header-anchor">#</a> 20. <code>macosx.internal</code></h4> <div class="language- extra-class"><pre class="language-text"><code>xcodebuild: error: SDK "macosx.internal" cannot be located.
+xcrun: error: unable to find utility "clang++", not a developer tool or in PATH
+</code></pre></div><p>把 <code>Target-objc</code> 的 <code>Build Phases</code> -&gt; <code>Run Script(markgc)</code> 里的内容 <code>macosx.internal</code> 改为 <code>macosx</code>.</p> <p><img src="./编译 Runtime 源码 （objc4-750.1） _ 大专栏_files/11.a140f0fb.jpg" alt=""></p> <h4 id="_21-no-such-public-header-file-tmp-objc-dst-usr-include-objc-objectivec-apinotes"><a href="https://www.dazhuanlan.com/2019/11/14/5dcd6ed065a80/#_21-no-such-public-header-file-tmp-objc-dst-usr-include-objc-objectivec-apinotes" aria-hidden="true" class="header-anchor">#</a> 21. <code>no such public header file: '/tmp/objc.dst/usr/include/objc/ObjectiveC.apinotes'</code></h4> <p>需要把 <code>Target-objc</code> 的 <code>Build Settings</code> -&gt; <code>Other Text</code> -&gt; <code>Based InstallAPI Flags</code> 里的内容全部清除。</p> <p><img src="./编译 Runtime 源码 （objc4-750.1） _ 大专栏_files/12.8046a9d1.jpg" alt=""></p> <p>并且一定记得要把 <code>Text-Based InstallAPI Verification Model</code> 里的值改为 <code>Errors Only</code>.</p> <p><img src="./编译 Runtime 源码 （objc4-750.1） _ 大专栏_files/13.cf942ede.jpg" alt=""></p> <h3 id="警告的处理"><a href="https://www.dazhuanlan.com/2019/11/14/5dcd6ed065a80/#%E8%AD%A6%E5%91%8A%E7%9A%84%E5%A4%84%E7%90%86" aria-hidden="true" class="header-anchor">#</a> 警告的处理</h3> <h4 id="_1-pthread-tsd-slot-pthread-self-macro-redefined"><a href="https://www.dazhuanlan.com/2019/11/14/5dcd6ed065a80/#_1-pthread-tsd-slot-pthread-self-macro-redefined" aria-hidden="true" class="header-anchor">#</a> 1. <code>'_PTHREAD_TSD_SLOT_PTHREAD_SELF' macro redefined</code></h4> <p>在 <code>pthread_machdep.h</code> 头文件中宏定义重复了：</p> <ul><li><code>_PTHREAD_TSD_SLOT_PTHREAD_SELF</code></li> <li><code>_PTHREAD_TSD_RESERVED_SLOT_COUNT</code></li> <li><code>__PTK_LIBC_TTYNAME_KEY</code></li> <li><code>LOCK_INIT</code></li> <li><code>LOCK_INITIALIZER</code></li></ul> <p>根据上面的经验这里选择把 <code>pthread_machdep.h</code> 文件中的宏定义注释掉。</p> <h4 id="_2-traditional-headermap-style"><a href="https://www.dazhuanlan.com/2019/11/14/5dcd6ed065a80/#_2-traditional-headermap-style" aria-hidden="true" class="header-anchor">#</a> 2. <code>Traditional headermap style</code></h4> <div class="language- extra-class"><pre class="language-text"><code>Traditional headermap style is no longer supported; please migrate to using separate headermaps and set 'ALWAYS_SEARCH_USER_PATHS' to NO. (in target 'objc-trampolines')
+Traditional headermap style is no longer supported; please migrate to using separate headermaps and set 'ALWAYS_SEARCH_USER_PATHS' to NO. (in target 'objc')
+</code></pre></div><p>在项目 <code>Target</code> -&gt; <code>objc-trampolines</code> 和 <code>objc</code> -&gt; <code>Build Settings</code> 下设置 <code>ALWAYS_SEARCH_USER_PATHS</code> 为 NO。</p> <p><img src="./编译 Runtime 源码 （objc4-750.1） _ 大专栏_files/14.4bc46a8c.jpg" alt=""></p> <h4 id="_3-objc-exception-mm-584-5-code-will-never-be-executed"><a href="https://www.dazhuanlan.com/2019/11/14/5dcd6ed065a80/#_3-objc-exception-mm-584-5-code-will-never-be-executed" aria-hidden="true" class="header-anchor">#</a> 3. <code>objc-exception.mm:584:5: Code will never be executed</code></h4> <p>把不会执行到的代码 <code>__builtin_trap();</code> 注释掉.</p> <h4 id="_4-objc-class-mm-558-33-possible-misuse-of-comma-operator-here"><a href="https://www.dazhuanlan.com/2019/11/14/5dcd6ed065a80/#_4-objc-class-mm-558-33-possible-misuse-of-comma-operator-here" aria-hidden="true" class="header-anchor">#</a> 4. <code>objc-class.mm:558:33: Possible misuse of comma operator here</code></h4> <p>根据提示修改。</p> <h2 id="调试"><a href="https://www.dazhuanlan.com/2019/11/14/5dcd6ed065a80/#%E8%B0%83%E8%AF%95" aria-hidden="true" class="header-anchor">#</a> 调试</h2> <p>经过上面的一系列修改项目就可以跑起来了，这时候新建一个 <code>target</code> ，选择 OS X 下的 <code>Command Line Tool</code> ，起个名字 <code>test</code>。</p> <p><img src="./编译 Runtime 源码 （objc4-750.1） _ 大专栏_files/15.a44f9d0f.jpg" alt=""></p> <p>然后在 <code>Build Phases</code> -&gt; <code>Target Dependencies</code>，把 <code>Target objc</code>加进来。</p> <p><img src="./编译 Runtime 源码 （objc4-750.1） _ 大专栏_files/16.cf80a17f.jpg" alt=""></p> <p>然后在 <code>main.m</code> 加入你想加的测试代码。</p> <div class="language- extra-class"><pre class="language-text"><code>#import &lt;Foundation/Foundation.h&gt;
+#import &lt;objc/runtime.h&gt;
+#import &lt;objc/message.h&gt;
+
+int main(int argc, const char * argv[]) {
+    @autoreleasepool {
+        Class suprerClass = [NSObject class];
+        Class someClass = objc_allocateClassPair(suprerClass, "someClass", 0);
+        objc_registerClassPair(someClass);
+        id someInstance = [[someClass alloc] init];
+        NSLog(@"%@", someInstance);
+    }
+    return 0;
+}
+</code></pre></div><h2 id="统计"><a href="https://www.dazhuanlan.com/2019/11/14/5dcd6ed065a80/#%E7%BB%9F%E8%AE%A1" aria-hidden="true" class="header-anchor">#</a> 统计</h2> <p>需要加入的头文件及其目录如下</p> <div class="language- extra-class"><pre class="language-text"><code>./CrashReporterClient.h
+./Block_private.h
+./_simple.h
+./pthread
+./pthread/spinlock_private.h
+./pthread/tsd_private.h
+./System
+./System/pthread_machdep.h
+./System/machine
+./System/machine/cpu_capabilities.h
+./sys
+./sys/reason.h
+./os
+./os/lock_private.h
+./os/tsd.h
+./os/base_private.h
+./objc-shared-cache.h
+./mach-o
+./mach-o/dyld_priv.h
+</code></pre></div><h2 id="杂项"><a href="https://www.dazhuanlan.com/2019/11/14/5dcd6ed065a80/#%E6%9D%82%E9%A1%B9" aria-hidden="true" class="header-anchor">#</a> 杂项</h2> <h3 id="_1-import-没有提示"><a href="https://www.dazhuanlan.com/2019/11/14/5dcd6ed065a80/#_1-import-%E6%B2%A1%E6%9C%89%E6%8F%90%E7%A4%BA" aria-hidden="true" class="header-anchor">#</a> 1. import 没有提示</h3> <p>这应该是 XCode 10 的问题，可以通过 <code>File</code> --&gt; <code>Workspace 或者 Project Settings</code> --&gt; <code>Build System</code> --&gt; <code>Legacy Build System</code> 来设置。</p> <p><img src="./编译 Runtime 源码 （objc4-750.1） _ 大专栏_files/17.6423c56e.jpg" alt=""></p> <h3 id="_2-某些库的头文件无法找到"><a href="https://www.dazhuanlan.com/2019/11/14/5dcd6ed065a80/#_2-%E6%9F%90%E4%BA%9B%E5%BA%93%E7%9A%84%E5%A4%B4%E6%96%87%E4%BB%B6%E6%97%A0%E6%B3%95%E6%89%BE%E5%88%B0" aria-hidden="true" class="header-anchor">#</a> 2. 某些库的头文件无法找到</h3> <p>随着版本的更新，新版本可能就不能按照上面的进行处理了。</p> <p>这时候首先可以先 Google 一下缺失的头文件，大部分情况下都能直接找到源码的地址。实在没有找到就换低版本尝试。</p> <h2 id="参考"><a href="https://www.dazhuanlan.com/2019/11/14/5dcd6ed065a80/#%E5%8F%82%E8%80%83" aria-hidden="true" class="header-anchor">#</a> 参考</h2> <ol><li><a href="https://blog.csdn.net/wotors/article/details/52489464" target="_blank" rel="noopener noreferrer">objc - 编译Runtime源码objc4-680</a></li> <li><a href="http://www.imooc.com/article/268031" target="_blank" rel="noopener noreferrer">最新Runtime源码objc4-750编译</a></li> <li><a href="https://www.jianshu.com/p/9e0fc8295c4b" target="_blank" rel="noopener noreferrer">Xcode 10 下如何创建可调试的objc4-723、objc4-750.1工程<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li></ol></div>	</div>
+	<footer class="post-footer">
+		<div class="post-tags">
+					</div>
+		<div class="post-nav">
+			<div class="post-nav-next post-nav-item"><i class="fa fa-chevron-left"></i> <a href="https://www.dazhuanlan.com/2019/11/14/5dcd6ee0a7f53/" rel="next">MySQL 常用的一些函数</a></div>
+			<div class="post-nav-prev post-nav-item"><a href="https://www.dazhuanlan.com/2019/11/14/5dcd6ec9454d4/" rel="prev">hexo博客next主题折腾记</a> <i class="fa fa-chevron-right"></i></div>
+		</div>
+</footer>
+		<div class="crp_related "><h3>相关文章</h3><ul><li><a href="https://www.dazhuanlan.com/2019/10/15/5da567ed08033/" target="_blank"><span class="crp_title">babel-runtime, babel-preset-env,…</span></a></li><li><a href="https://www.dazhuanlan.com/2019/09/02/a7ce1514855d/" target="_blank"><span class="crp_title">PWA 操作 Windows Runtime APIs</span></a></li><li><a href="https://www.dazhuanlan.com/2019/09/02/1b079b520fe9/" target="_blank"><span class="crp_title">Java 使用 Runtime 导入 SQL File to Mysql</span></a></li><li><a href="https://www.dazhuanlan.com/2019/09/04/08e9a8cea3f5/" target="_blank"><span class="crp_title">[.NET]安装 KVM (K Version Manager) 及 KRE (K Runtime…</span></a></li><li><a href="https://www.dazhuanlan.com/2019/09/04/6c15b4984816/" target="_blank"><span class="crp_title">[.NET Concept].NET 4.0 DLR (Dynamic Language Runtime) 概述</span></a></li><li><a href="https://www.dazhuanlan.com/2019/09/04/06d101d29dd8/" target="_blank"><span class="crp_title">[SQL SERVER][SSIS]设定Package 32bit runtime mode</span></a></li><li><a href="https://www.dazhuanlan.com/2019/09/04/ddde6aa58c6c/" target="_blank"><span class="crp_title">[读书心得]Runtime Type Fundamentals from CLR via C#</span></a></li><li><a href="https://www.dazhuanlan.com/2019/09/04/e92d08c2e97c/" target="_blank"><span class="crp_title">ASP.NET Core 与 .Net Core, .Net Platform Standard, 以及…</span></a></li><li><a href="https://www.dazhuanlan.com/2019/09/05/9fc04e513f9c/" target="_blank"><span class="crp_title">Windows Phone 8 - Runtime Location API - 2</span></a></li><li><a href="https://www.dazhuanlan.com/2019/09/09/ebc5f59f3685/" target="_blank"><span class="crp_title">Fixing &amp;quot;Microsoft JScript runtime error:…</span></a></li></ul><div class="crp_clear"></div></div>	
+</article>
+                </div>
+                            </div>
+            <div id="comments" class="comments"></div>        </div>
+    </div>
+</main>
+<footer id="footer" class="footer">
+    <div class="footer-inner">
+        <div class="copyright">
+                        © <span></span> - <span>2020</span> <span class="with-love"> <i class="icon-next-heart fa fa-heart"></i></span>
+            <span class="author">大专栏</span>|<a href="http://www.miitbeian.gov.cn/" target="_blank">粤ICP备18064926号-2</a>
+
+            <ul id="friendlink">
+                            </ul>
+        </div>
+
+        <div style="display:none"></div>
+    </div>
+</footer>
+<div class="back-to-top"><i class="fa fa-arrow-up"></i></div>
+</div>
+<script type="text/javascript">
+    if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+        window.Promise = null;
+    }
+</script>
+<script src="./编译 Runtime 源码 （objc4-750.1） _ 大专栏_files/jquery.min.js"></script>
+
+
+<style>
+    ul#friendlink {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+    }
+
+    ul#friendlink li {
+        float: left;
+    }
+
+    ul#friendlink li a {
+        display: block;
+        text-align: center;
+        padding: 5px;
+        text-decoration: none;
+    }
+</style>
+
+
+<!-- highlight.js -->
+
+<script>
+    $('pre code').each(function(i, block) {
+        hljs.highlightBlock(block);
+    });
+</script>
+<script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?2374bfdfe14a279e4a045267051b54e1";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+<script type="text/javascript" defer="" src="./编译 Runtime 源码 （objc4-750.1） _ 大专栏_files/autoptimize_6ad2781237ca6f36ca69f036335455eb.js"></script>
+</body></html>
