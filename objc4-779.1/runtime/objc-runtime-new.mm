@@ -2934,6 +2934,8 @@ void _objc_flush_caches(Class cls)
 *
 * Locking: write-locks runtimeLock
 **********************************************************************/
+// runtime-analysize :1. _dyld_objc_notify_register注册的map_images调用
+// runtime-analysize :2. map_images内部调用map_images_nolock
 void
 map_images(unsigned count, const char * const paths[],
            const struct mach_header * const mhdrs[])
@@ -2951,10 +2953,10 @@ map_images(unsigned count, const char * const paths[],
 **********************************************************************/
 extern bool hasLoadMethods(const headerType *mhdr);
 extern void prepare_load_methods(const headerType *mhdr);
-
 void
 load_images(const char *path __unused, const struct mach_header *mh)
 {
+    // runtime-analysize-load_images : 2 内部调用prepare_load_methods,call_load_methods
     // Return without taking locks if there are no +load methods here.
     if (!hasLoadMethods((const headerType *)mh)) return;
 
@@ -3317,7 +3319,7 @@ void _read_images(header_info **hList, uint32_t hCount, int totalClasses, int un
         if (DisableTaggedPointers) {
             disableTaggedPointers();
         }
-        
+
         initializeTaggedPointerObfuscator();
 
         if (PrintConnecting) {
@@ -3334,7 +3336,7 @@ void _read_images(header_info **hList, uint32_t hCount, int totalClasses, int un
 
         ts.log("IMAGE TIMES: first time tasks");
     }
-
+// runtime-analysize :3.3 修复@selector的引用
     // Fix up @selector references
     static size_t UnfixedSelectors;
     {
@@ -3356,10 +3358,12 @@ void _read_images(header_info **hList, uint32_t hCount, int totalClasses, int un
     }
 
     ts.log("IMAGE TIMES: fix up selector references");
-
+// runtime-analysize :3.3 查找classes，修复未解决的future class，标志bundle classes
     // Discover classes. Fix up unresolved future classes. Mark bundle classes.
     bool hasDyldRoots = dyld_shared_cache_some_image_overridden();
-
+// 遍历header list，从每个header的__objc_classlist段获取类列表，遍历类列表，调用readClass
+// readClass内部调用addRemappedClass创建新类，创建完成后调用addNamedClass将类添加到NXMapTable，addClassTableEntry添加类表入口
+    
     for (EACH_HEADER) {
         if (! mustReadClasses(hi, hasDyldRoots)) {
             // Image is sufficiently optimized that we need not call readClass()
@@ -3393,6 +3397,8 @@ void _read_images(header_info **hList, uint32_t hCount, int totalClasses, int un
     // Class list and nonlazy class list remain unremapped.
     // Class refs and super refs are remapped for message dispatching.
     
+    // runtime-analysize :3.3 修复remapped的classes，类和非lazy列表保留unremapped，重映射类和super的引用，用于消息派发，remapClassRef
+    // 遍历header list，从每个header的__objc_classrefs段获取类列表，遍历类列表，调用remapClassRef
     if (!noClassesRemapped()) {
         for (EACH_HEADER) {
             Class *classrefs = _getObjc2ClassRefs(hi, &count);
@@ -3428,7 +3434,9 @@ void _read_images(header_info **hList, uint32_t hCount, int totalClasses, int un
 #endif
 
     bool cacheSupportsProtocolRoots = sharedCacheSupportsProtocolRoots();
-
+// runtime-analysize :3.3 查找协议列表，修复协议的refs
+// 遍历header list，从每个header的__objc_protolist段获取协议列表，遍历协议列表，调用readProtocol
+    // 协议存放在一个全局的map中，以clsname作为key，类遵循的协议list作为value，每个协议也都有isa，它的isa指向类对象
     // Discover protocols. Fix up protocol refs.
     for (EACH_HEADER) {
         extern objc_class OBJC_CLASS_$_Protocol;
@@ -3461,7 +3469,8 @@ void _read_images(header_info **hList, uint32_t hCount, int totalClasses, int un
     }
 
     ts.log("IMAGE TIMES: discover protocols");
-
+// runtime-analysize :3.3 修复@protocol的引用
+    // 遍历header list，从每个header的__objc_protorefs段获取协议列表，遍历协议列表，调用remapProtocolRef
     // Fix up @protocol references
     // Preoptimized images may have the right 
     // answer already but we don't know for sure.
@@ -3479,7 +3488,9 @@ void _read_images(header_info **hList, uint32_t hCount, int totalClasses, int un
     }
 
     ts.log("IMAGE TIMES: fix up @protocol references");
-
+// runtime-analysize :3.3 查找分类categories
+    // 遍历header list，从每个header的__objc_catlist，__objc_catlist2段获取分类列表，调用processCatlist，遍历每个分类，调用attachCategories
+    // 如果分类对应的主类还未初始化，则调用unattachedCategories.addForClass添加到map中，这个map以class为key，locstamped_category_t list为value
     // Discover categories.
     for (EACH_HEADER) {
         bool hasClassProperties = hi->info()->hasCategoryClassProperties();
@@ -3549,7 +3560,10 @@ void _read_images(header_info **hList, uint32_t hCount, int totalClasses, int un
     }
 
     ts.log("IMAGE TIMES: discover categories");
-
+// runtime-analysize :3.3 处理带有+load和静态实例的类对象的初始化工作
+// 遍历header list，从每个header的__objc_nlclslist段获取类列表，遍历每个类，调用remapClass,addClassTableEntry,调用realizeClassWithoutSwift来对类对象的
+// realizeClassWithoutSwift方法内部使用自己去初始化superclass和metaclass，之后会调用addSubclass和addRootClass类来添加类，再之后会调用methodizeClass来合并分类的方法，属性，协议列表到主类中
+    
     // Category discovery MUST BE Late to avoid potential races
     // when other threads call the new category code before
     // this thread finishes its fixups.
@@ -3698,7 +3712,8 @@ bool hasLoadMethods(const headerType *mhdr)
 void prepare_load_methods(const headerType *mhdr)
 {
     size_t count, i;
-
+// runtime-analysize-load_images : 2.1 prepare_load_methods内部调用schedule_class_load方法，获取镜像的分类列表，遍历分类，将分类的load函数指针加入到add_category_to_loadable_list
+//schedule_class_load内部自下而上递归调用父类的schedule_class_load，将load函数指针加入到add_class_to_loadable_list中
     runtimeLock.assertLocked();
 
     classref_t const *classlist = 

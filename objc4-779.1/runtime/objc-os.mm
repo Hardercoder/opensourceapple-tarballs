@@ -459,7 +459,9 @@ map_images_nolock(unsigned mhCount, const char * const mhPaths[],
     header_info *hList[mhCount];
     uint32_t hCount;
     size_t selrefCount = 0;
-
+// runtime-analysize :3.1 map_images_nolock内部调用preopt_init
+// runtime-analysize :3.2 preopt_init内部根据__TEXT, __objc_opt_ro条件设置全局静态变量preoptimized
+    
     // Perform first-time initialization if necessary.
     // This function is called before ordinary library initializers. 
     // fixme defer initialization until an objc-using image is found?
@@ -474,7 +476,8 @@ map_images_nolock(unsigned mhCount, const char * const mhPaths[],
 
     // Find all images with Objective-C metadata.
     hCount = 0;
-
+// runtime-analysize :3.1 查找所有oc metadata，倒序遍历mach_header list，顺序添加到header_info list，这一步还统计了所有的sel的count
+    
     // Count classes. Size various table based on the total.
     int totalClasses = 0;
     int unoptimizedTotalClasses = 0;
@@ -526,6 +529,8 @@ map_images_nolock(unsigned mhCount, const char * const mhPaths[],
         }
     }
 
+// runtime-analysize :3.1 执行一次runtime初始化
+// sel_init初始化一个所有sel的count的set，arr_init初始化AutoreleasePoolPage，SideTablesMap，_objc_associations_init
     // Perform one-time runtime initialization that must be deferred until 
     // the executable itself is found. This needs to be done before 
     // further initialization.
@@ -587,13 +592,13 @@ map_images_nolock(unsigned mhCount, const char * const mhPaths[],
 #endif
 
     }
-
+// runtime-analysize :3.3 若解析到有header_info，调用_read_images
     if (hCount > 0) {
         _read_images(hList, hCount, totalClasses, unoptimizedTotalClasses);
     }
 
     firstTime = NO;
-    
+// runtime-analysize :3.3 通过函数地址调用我们自己添加的load_images的回调函数func(mdhrs[i])
     // Call image load funcs after everything is set up.
     for (auto func : loadImageFuncs) {
         for (uint32_t i = 0; i < mhCount; i++) {

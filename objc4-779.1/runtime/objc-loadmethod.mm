@@ -338,7 +338,7 @@ void call_load_methods(void)
 {
     static bool loading = NO;
     bool more_categories;
-
+// runtime-analysize-load_images : 2.2 call_load_methods先后调用call_class_loads，call_category_loads先调用所有父类的load方法，再调用分类的load方法
     loadMethodLock.assertLocked();
 
     // Re-entrant calls do nothing; the outermost call will finish the job.
