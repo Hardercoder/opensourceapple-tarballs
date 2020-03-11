@@ -500,6 +500,7 @@ void ImageLoader::link(const LinkContext& context, bool forceLazysBound, bool pr
 	(*context.setErrorStrings)(0, NULL, NULL, NULL);
 
 	uint64_t t0 = mach_absolute_time();
+	// dyld-analysis : 递归加载所有依赖库进内存
 	this->recursiveLoadLibraries(context, preflightOnly, loaderRPaths, imagePath);
 	context.notifyBatch(dyld_image_state_dependents_mapped, preflightOnly);
 
@@ -515,11 +516,13 @@ void ImageLoader::link(const LinkContext& context, bool forceLazysBound, bool pr
 	{
 		dyld3::ScopedTimer(DBG_DYLD_TIMING_APPLY_FIXUPS, 0, 0, 0);
 		t2 = mach_absolute_time();
+		// dyld-analysis : 递归对自己以及依赖库进行复基位操作。在以前，程序每次加载其在内存中的堆栈基地址都是一样的，这意味着你的方法，变量等地址每次都一样的，这使得程序很不安全，后面就出现ASLR（Address space layout randomization,地址空间配置随机加载），程序每次启动后地址都会随机变化，这样程序里所有的代码地址都是错的，需要重新对代码地址进行计算修复才能正常访问
 		this->recursiveRebaseWithAccounting(context);
 		context.notifyBatch(dyld_image_state_rebased, false);
 
 		t3 = mach_absolute_time();
 		if ( !context.linkingMainExecutable )
+			// dyld-analysis :对库中所有nolazy的符号进行bind,一般的情况下多数符号都是lazybind的，他们在第一次使用的时候才进行bind
 			this->recursiveBindWithAccounting(context, forceLazysBound, neverUnload);
 
 		t4 = mach_absolute_time();

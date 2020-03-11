@@ -205,7 +205,7 @@ if __name__ == "__main__":
     dyldIncludesDir = dyldSrcDir + "/include/"
     sdkDir = os.getenv("SDKROOT", "")
     if not sdkDir:
-        sdkDir = subprocess.check_output(["xcrun", "-sdk", "macosx.internal", "--show-sdk-path"]).rstrip()
+        sdkDir = subprocess.check_output(["xcrun", "-sdk", "macosx", "--show-sdk-path"]).rstrip()
     toolsDir = os.getenv("TOOLCHAIN_DIR", "/")
     defaultMinOS = ""
     minVersNum = "10.14"

@@ -1533,6 +1533,8 @@ static void runAllStaticTerminators(void* extra)
 	}
 }
 
+// dyld-analysis : 调用所有image的Initalizer方法进行初始化。这里的Initalizers方法并非名为Initalizers的方法，而是C++静态对象初始化构造器，atribute((constructor))进行修饰的方法，在LmageLoader类中initializer函数指针所指向该初始化方法的地址
+
 void initializeMainExecutable()
 {
 	// record that we've reached this step
@@ -6496,6 +6498,8 @@ reloadAllImages:
 
 		CRSetCrashLogMessage(sLoadingCrashMessage);
 		// instantiate ImageLoader for main executable
+		// dyld-analysis :将我们可执行文件以及插入的lib加载进内存,生成对应的image
+		// dyld-analysis :sMainExecutable对应着我们的可执行文件，里面包含了我们项目中所有新建的类
 		sMainExecutable = instantiateFromLoadedImage(mainExecutableMH, mainExecutableSlide, sExecPath);
 		gLinkContext.mainExecutable = sMainExecutable;
 		gLinkContext.mainExecutableCodeSigned = hasCodeSignatureLoadCommand(mainExecutableMH);
@@ -6562,7 +6566,8 @@ reloadAllImages:
 
 		// load any inserted libraries
 		if	( sEnv.DYLD_INSERT_LIBRARIES != NULL ) {
-			for (const char* const* lib = sEnv.DYLD_INSERT_LIBRARIES; *lib != NULL; ++lib) 
+			for (const char* const* lib = sEnv.DYLD_INSERT_LIBRARIES; *lib != NULL; ++lib)
+				// dyld-analysis :InsertDylib一些插入的库，他们配置在全局的环境变量sEnv中，我们可以在项目中设置环境变量DYLD_PRINT_ENV为1来打印该sEnv的值
 				loadInsertedDylib(*lib);
 		}
 		// record count of inserted libraries so that a flat search will look at 
@@ -6578,6 +6583,7 @@ reloadAllImages:
 			sMainExecutable->rebase(gLinkContext, -mainExecutableSlide);
 		}
 #endif
+		// dyld-analysis : 对上面生成的Image进行进行链接。其主要做的事有对image进行load(加载),rebase(基地址复位)，bind(外部符号绑定)
 		link(sMainExecutable, sEnv.DYLD_BIND_AT_LAUNCH, true, ImageLoader::RPathChain(NULL, NULL), -1);
 		sMainExecutable->setNeverUnloadRecursive();
 		if ( sMainExecutable->forceFlat() ) {
