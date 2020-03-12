@@ -13,11 +13,11 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)studyObjSize;
 
 + (void)saocaozuo;
-+ myReturnId;//省略返回值
-+ (void)myIdParam:arg;//省略参数
-+ (void):(id)arg1 :(id)arg2;//省略方法名
-- _;
-- :_;
+//+ myReturnId;//省略返回值
+//+ (void)myIdParam:arg;//省略参数
+//+ (void):(id)arg1 :(id)arg2;//省略方法名
+//- _;
+//- :_;
 
 
 

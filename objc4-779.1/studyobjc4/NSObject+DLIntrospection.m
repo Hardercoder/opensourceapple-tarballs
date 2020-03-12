@@ -19,27 +19,27 @@
 
 //https://developer.apple.com/library/mac/#documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html
 + (NSString *)decodeType:(const char *)cString {
-    if (!strcmp(cString, @encode(char))) return @"char";
-    if (!strcmp(cString, @encode(int))) return @"int";
-    if (!strcmp(cString, @encode(short))) return @"short";
-    if (!strcmp(cString, @encode(long))) return @"long";
-    if (!strcmp(cString, @encode(long long))) return @"long long";
+    if (strcmp(cString, @encode(char)) == 0) return @"char";
+    if (strcmp(cString, @encode(int)) == 0) return @"int";
+    if (strcmp(cString, @encode(short)) == 0) return @"short";
+    if (strcmp(cString, @encode(long)) == 0) return @"long";
+    if (strcmp(cString, @encode(long long)) == 0) return @"long long";
     
-    if (!strcmp(cString, @encode(unsigned char))) return @"unsigned char";
-    if (!strcmp(cString, @encode(unsigned int))) return @"unsigned int";
-    if (!strcmp(cString, @encode(unsigned short))) return @"unsigned short";
-    if (!strcmp(cString, @encode(unsigned long))) return @"unsigned long";
-    if (!strcmp(cString, @encode(unsigned long long))) return @"unsigned long long";
+    if (strcmp(cString, @encode(unsigned char)) == 0) return @"unsigned char";
+    if (strcmp(cString, @encode(unsigned int)) == 0) return @"unsigned int";
+    if (strcmp(cString, @encode(unsigned short)) == 0) return @"unsigned short";
+    if (strcmp(cString, @encode(unsigned long)) == 0) return @"unsigned long";
+    if (strcmp(cString, @encode(unsigned long long)) == 0) return @"unsigned long long";
     
-    if (!strcmp(cString, @encode(float))) return @"float";
-    if (!strcmp(cString, @encode(double))) return @"double";
+    if (strcmp(cString, @encode(float)) == 0) return @"float";
+    if (strcmp(cString, @encode(double)) == 0) return @"double";
     
-    if (!strcmp(cString, @encode(BOOL))) return @"BOOL";
-    if (!strcmp(cString, @encode(void))) return @"void";
-    if (!strcmp(cString, @encode(char *))) return @"char *";
-    if (!strcmp(cString, @encode(id))) return @"id";
-    if (!strcmp(cString, @encode(Class))) return @"class";
-    if (!strcmp(cString, @encode(SEL))) return @"SEL";
+    if (strcmp(cString, @encode(BOOL)) == 0) return @"BOOL";
+    if (strcmp(cString, @encode(void)) == 0) return @"void";
+    if (strcmp(cString, @encode(char *)) == 0) return @"char *";
+    if (strcmp(cString, @encode(id)) == 0) return @"id";
+    if (strcmp(cString, @encode(Class)) == 0) return @"class";
+    if (strcmp(cString, @encode(SEL)) == 0) return @"SEL";
     
 //@TODO: do handle bitmasks
     NSString *result = [NSString stringWithCString:cString encoding:NSUTF8StringEncoding];
