@@ -24,7 +24,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.SymbolicBreakpoint">
          <BreakpointContent
             uuid = "D1AC1C20-73B6-43CD-B31C-CCEBB4725F20"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             symbolName = "_objc_init"
@@ -32,7 +32,7 @@
             <Locations>
                <Location
                   uuid = "D1AC1C20-73B6-43CD-B31C-CCEBB4725F20 - bbc41dcf801b248f"
-                  shouldBeEnabled = "Yes"
+                  shouldBeEnabled = "No"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
                   symbolName = "_objc_init"
