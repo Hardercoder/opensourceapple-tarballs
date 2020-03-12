@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "183BD2A12417AB5F00E148AA"
-               BuildableName = "studyobjc4"
-               BlueprintName = "studyobjc4"
+               BlueprintIdentifier = "7A2E8B092410F196000F6584"
+               BuildableName = "KCObjcTest"
+               BlueprintName = "KCObjcTest"
                ReferencedContainer = "container:objc.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -44,9 +44,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "183BD2A12417AB5F00E148AA"
-            BuildableName = "studyobjc4"
-            BlueprintName = "studyobjc4"
+            BlueprintIdentifier = "7A2E8B092410F196000F6584"
+            BuildableName = "KCObjcTest"
+            BlueprintName = "KCObjcTest"
             ReferencedContainer = "container:objc.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -61,9 +61,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "183BD2A12417AB5F00E148AA"
-            BuildableName = "studyobjc4"
-            BlueprintName = "studyobjc4"
+            BlueprintIdentifier = "7A2E8B092410F196000F6584"
+            BuildableName = "KCObjcTest"
+            BlueprintName = "KCObjcTest"
             ReferencedContainer = "container:objc.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

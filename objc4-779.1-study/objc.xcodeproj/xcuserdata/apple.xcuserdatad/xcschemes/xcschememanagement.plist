@@ -4,6 +4,11 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>KCObjcTest.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>0</integer>
+		</dict>
 		<key>objc-simulator.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
@@ -24,10 +29,13 @@
 			<key>orderHint</key>
 			<integer>4</integer>
 		</dict>
-		<key>studyobjc4.xcscheme_^#shared#^_</key>
+	</dict>
+	<key>SuppressBuildableAutocreation</key>
+	<dict>
+		<key>7A2E8B092410F196000F6584</key>
 		<dict>
-			<key>orderHint</key>
-			<integer>0</integer>
+			<key>primary</key>
+			<true/>
 		</dict>
 	</dict>
 </dict>

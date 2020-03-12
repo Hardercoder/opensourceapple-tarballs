@@ -31,7 +31,8 @@ int main(int argc, const char * argv[]) {
 //        NSLog(@"instanceMethods obj1 %@", [TestObj1 instanceMethods]);
 //        NSLog(@"parentClassHierarchy obj1 %@", [TestObj1 parentClassHierarchy]);
         
-        [[NSRunLoop currentRunLoop] run];
+        NSDate *stopDate = [[[NSDate alloc] init] dateByAddingTimeInterval:30.f];
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:stopDate];
     }
     return 0;
 }
